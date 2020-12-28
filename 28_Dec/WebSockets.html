@@ -1,0 +1,101 @@
+﻿<!DOCTYPE html>
+<meta charset="utf-8" />
+<title>WebSocket Test</title>
+
+<style>
+
+    .a2 {
+        animation: blinking 6s infinite;
+        font-size: 30px;
+    }
+
+    @keyframes blinking {
+        0% {
+          color: black;
+        }
+
+        20% {
+            color: grey;
+        }
+
+        40% {
+            color: saddlebrown;
+        }
+
+        60% {
+            color: forestgreen;
+        }
+
+        80% {
+            color: red;
+        }
+
+        100% {
+            color: magenta;
+        }
+    }
+</style>
+<script language="javascript" type="text/javascript">
+
+//var wsUri = "wss://echo.websocket.org/";
+var wsUri = "ws://localhost:7001/WSDemo/wsep";
+
+    function init() {
+
+        websocket = new WebSocket(wsUri);
+      //  websocket.onopen = function (evt) { onOpen(evt) };
+        websocket.onclose = function (evt) { onClose(evt) };
+        websocket.onmessage = function (evt) { onMessage(evt) };
+        websocket.onerror = function (evt) { onError(evt) };
+        console.log("Web Socket Open ===>>>>  ");
+
+    }
+
+    function onOpen(evt) {
+        var msg = document.getElementById('sendMsg').value;
+        websocket.send(msg.toUpperCase());
+        // complex processing.
+        console.log(" \n\t\t\t**** Sent Msg to Web Socket *** \n\n")
+    }
+
+    function onClose(evt) {
+        console.log("Web Socket Clsoed !!!!");
+    }
+
+    function onMessage(evt) {
+        console.log(" \n\t\t\t**** Received Msg from the Web Socket *** \n\n")
+        document.getElementById('rcvMsg').value = evt.data;
+   //     websocket.close();
+    }
+
+    function onError(evt) {
+        writeToScreen('<span style="color: red;"> Error with Web Socket !!!! Try Again :-) </span> ' + evt.data);
+    }
+
+
+    init();
+</script>
+
+<h1>
+    <p class="a2">WebSocket Test ==== Echo Server </p>
+</h1>
+<table border="2" style="width : 400px; height:150px;  text-align: center; vertical-align: middle;">
+    <tr>
+        <th> Sending .....</th>
+        <th> Receiving .... </th>
+    </tr>
+    <tr>
+        <td>
+            <input onkeyup="onOpen()" type="text" id="sendMsg" TABINDEX="1" />
+        </td>
+        <td>
+            <input  type="text" id="rcvMsg" />
+        </td>
+    </tr>
+    <tr>
+        <td colspan="2">
+            <input style="display: block;    width: 100%;" TABINDEX="2" id="pushMsg" type="button" value="click here to sendMsg" onclick="onOpen()" />
+        </td>
+    </tr>
+
+</table>
